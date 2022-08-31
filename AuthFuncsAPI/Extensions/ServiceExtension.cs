@@ -8,6 +8,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using System.Diagnostics;
 using System.Text;
 
 namespace AuthFuncsAPI.Extensions
@@ -29,7 +30,10 @@ namespace AuthFuncsAPI.Extensions
         {
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddScoped<IValidator<RegisterRequestDto>, RegisterRequestDtoValidator>();
+            services.AddTransient<Stopwatch>();
+
             services.AddScoped<ErrorHandlingMiddleware>();
+            services.AddScoped<RequestTimerMiddleware>();
 
             services.AddScoped<IAuthorizationService, AuthorizationService>();
 
