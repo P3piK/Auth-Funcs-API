@@ -3,6 +3,7 @@ using AuthFuncsAPI.Middleware;
 using AuthFuncsCore.Config;
 using AuthFuncsRepository;
 using FluentValidation.AspNetCore;
+using NLog.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,10 @@ builder.Services.ConfigureJwtAuthentication(serviceProvider.GetService<Authentic
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// NLog logger
+builder.Logging.ClearProviders();
+builder.Host.UseNLog();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -34,6 +39,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<RequestTimerMiddleware>();
 app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseHttpsRedirection();
 

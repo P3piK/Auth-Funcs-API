@@ -5,6 +5,13 @@ namespace AuthFuncsAPI.Middleware
 {
     public class ErrorHandlingMiddleware : IMiddleware
     {
+        public ErrorHandlingMiddleware(ILogger<ErrorHandlingMiddleware> logger)
+        {
+            Logger = logger;
+        }
+
+        public ILogger<ErrorHandlingMiddleware> Logger { get; }
+
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
             try
@@ -18,7 +25,7 @@ namespace AuthFuncsAPI.Middleware
             }
             catch (Exception e)
             {
-                // logger
+                Logger.LogError(e, e.Message);
 
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 await context.Response.WriteAsync("Something went wrong");
