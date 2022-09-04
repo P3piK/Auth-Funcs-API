@@ -7,14 +7,6 @@ using System.Threading.Tasks;
 
 namespace AuthFuncsRepository.Entity
 {
-    //public enum UserStatus
-    //{
-    //    Active,
-    //    Inactive,
-    //    PasswordReset,
-    //    NotConfirmed,
-    //}
-
     public class User : EntityBase
     {
         private readonly DbContext context;

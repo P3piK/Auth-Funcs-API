@@ -5,6 +5,7 @@ using AuthFuncsService.Dto.Authorization;
 using AuthFuncsService.Exception;
 using AuthFuncsService.Interface;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -36,7 +37,9 @@ namespace AuthFuncsService.Service
         public LoginResponseDto Login(LoginRequestDto loginRequest)
         {
             var response = new LoginResponseDto();
-            var user = Context.Users?.SingleOrDefault(u => u.Login == loginRequest.Login);
+            var login = PurifyTextField(loginRequest.Login);
+            var user = Context.Users?
+                .SingleOrDefault(u => u.Login == loginRequest.Login);
 
             if (user == null)
             {
@@ -49,21 +52,7 @@ namespace AuthFuncsService.Service
                 throw new BadRequestException(ExceptionMessageResource.InvalidUsernameOrPassword);
             }
 
-            var claims = new List<Claim>()
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Login.ToString()),
-                new Claim(ClaimTypes.Role, user.Role.Name)
-            };
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AuthenticationConfig.JwtKey));
-            var credentials = new SigningCredentials(key, SecurityAlgorithms.Sha256);
-            var expiryDate = DateTime.Now.AddDays(AuthenticationConfig.JwtExpiryDays);
-
-            var token = new JwtSecurityToken(AuthenticationConfig.JwtIssuer, AuthenticationConfig.JwtIssuer, claims, expires: expiryDate, signingCredentials: credentials);
-            var tokenHandler = new JwtSecurityTokenHandler();
-
-            response.Token = tokenHandler.WriteToken(token);
+            response.Token = WriteJwtToken(user);
 
             return response;
         }
@@ -74,14 +63,43 @@ namespace AuthFuncsService.Service
 
             var user = new User(Context)
             {
-                Login = registerRequest.Login,
-                RoleId = 1,         // TODO
-                StatusId = 1,       // TODO
+                Login = PurifyTextField(registerRequest.Login),
+                Role = UserRoleEnum.User,
+                Status = UserStatusEnum.Active,
             };
             user.Password = PasswordHasher.HashPassword(user, registerRequest.Password);
             user.Persist();
 
             return ret;
+        }
+
+        private string WriteJwtToken(User user)
+        {
+            var claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Login.ToString()),
+                new Claim(ClaimTypes.Role, user.Role.Name)
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AuthenticationConfig.JwtKey));
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var expiryDate = DateTime.Now.AddDays(AuthenticationConfig.JwtExpiryDays);
+
+            var token = new JwtSecurityToken(AuthenticationConfig.JwtIssuer, AuthenticationConfig.JwtIssuer, claims, expires: expiryDate, signingCredentials: credentials);
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            return tokenHandler.WriteToken(token);
+        }
+
+        private static string PurifyTextField(string? login)
+        {
+            if (String.IsNullOrEmpty(login))
+            {
+                return login;
+            }
+
+            return login.Trim().ToLower();
         }
     }
 }
