@@ -20,11 +20,14 @@ namespace AuthFuncsRepository
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            optionsBuilder.UseLazyLoadingProxies(true);
             optionsBuilder.UseSqlServer(connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.BuildUserStatusEntity();
+            modelBuilder.BuildUserRoleEntity();
             modelBuilder.BuildUserEntity();
 
             // seed
