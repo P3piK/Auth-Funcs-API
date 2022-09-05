@@ -59,8 +59,6 @@ namespace AuthFuncsService.Service
 
         public RegisterResponseDto RegisterUser(RegisterRequestDto registerRequest)
         {
-            var ret = new RegisterResponseDto();
-
             var user = new User(Context)
             {
                 Login = PurifyTextField(registerRequest.Login),
@@ -70,8 +68,16 @@ namespace AuthFuncsService.Service
             user.Password = PasswordHasher.HashPassword(user, registerRequest.Password);
             user.Persist();
 
-            return ret;
+            return new RegisterResponseDto()
+            {
+                Id = user.Id,
+                Login = user.Login,
+                Role = user.Role.Name,
+                Status = user.Status.Name,
+            };
         }
+
+        #region Private
 
         private string WriteJwtToken(User user)
         {
@@ -101,5 +107,7 @@ namespace AuthFuncsService.Service
 
             return login.Trim().ToLower();
         }
+
+        #endregion
     }
 }
