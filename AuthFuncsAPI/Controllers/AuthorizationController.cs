@@ -32,5 +32,11 @@ namespace AuthFuncsService.Controllers
             return Created("user", ret);
         }
 
+        [HttpPost("forgotpassword")]
+        public ActionResult ForgotPassword([FromBody]ForgotPasswordDto request)
+        {
+            AuthorizationService.ForgotPassword(request.Login);
+            return Ok();
+        }
     }
 }

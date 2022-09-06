@@ -77,6 +77,15 @@ namespace AuthFuncsService.Service
             };
         }
 
+        public void ForgotPassword(string login)
+        {
+            var user = Context.Users.FirstOrDefault(u => u.Login == login);
+            if (user != null)
+            {
+                // notificationService.NotifyForgotPassword();
+            }
+        }
+
         #region Private
 
         private string WriteJwtToken(User user)
