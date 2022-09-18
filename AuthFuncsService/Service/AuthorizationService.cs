@@ -85,7 +85,7 @@ namespace AuthFuncsService.Service
 
         public void ForgotPassword(string login)
         {
-            NotificationService.SendNotification(login, "Hello world");
+            NotificationService.SendNotificationAsync(login, "Hello world");
 
             var user = Context.Users.FirstOrDefault(u => u.Login == login);
             if (user != null)
