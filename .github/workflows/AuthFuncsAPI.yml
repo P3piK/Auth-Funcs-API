@@ -1,8 +1,8 @@
-name: Build and deploy .NET Core application to Web App AuthFuncsAPI with API Management Service AuthFuncsAPIapi-AuthFuncsAPI
+name: Build and deploy
 on:
   push:
     branches:
-    - 4-forgot-password-method
+    - master
 env:
   AZURE_WEBAPP_NAME: AuthFuncsAPI
   AZURE_WEBAPP_PACKAGE_PATH: AuthFuncsAPI\publish
