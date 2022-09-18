@@ -7,13 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.1" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\AuthFuncsCore\AuthFuncsCore.csproj" />
     <ProjectReference Include="..\AuthFuncsRepository\AuthFuncsRepository.csproj" />
+    <ProjectReference Include="..\AuthFuncsWorkerService\AuthFuncsWorkerService.csproj" />
   </ItemGroup>
 
   <ItemGroup>

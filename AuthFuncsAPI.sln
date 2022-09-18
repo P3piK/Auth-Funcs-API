@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthFuncsRepository", "Auth
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthFuncsCore", "AuthFuncsCore\AuthFuncsCore.csproj", "{91126685-6F9F-4F2C-A2F3-C1D741ABFBDD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthFuncsServiceTest", "AuthFuncsServiceTest\AuthFuncsServiceTest.csproj", "{AC1A3F69-68A5-4642-99C7-DCF9A0B2340B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthFuncsServiceTest", "AuthFuncsServiceTest\AuthFuncsServiceTest.csproj", "{AC1A3F69-68A5-4642-99C7-DCF9A0B2340B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthFuncsWorkerService", "AuthFuncsWorkerService\AuthFuncsWorkerService.csproj", "{D5F02F3C-084B-4B70-A1D2-543402F3BBC8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{AC1A3F69-68A5-4642-99C7-DCF9A0B2340B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC1A3F69-68A5-4642-99C7-DCF9A0B2340B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC1A3F69-68A5-4642-99C7-DCF9A0B2340B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5F02F3C-084B-4B70-A1D2-543402F3BBC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5F02F3C-084B-4B70-A1D2-543402F3BBC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5F02F3C-084B-4B70-A1D2-543402F3BBC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5F02F3C-084B-4B70-A1D2-543402F3BBC8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
