@@ -6,8 +6,12 @@ using AuthFuncsWorkerService;
 using FluentValidation.AspNetCore;
 using Microsoft.Azure.ServiceBus.Core;
 using NLog.Web;
+using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var keyVaultEndpoint = new Uri(Environment.GetEnvironmentVariable("VaultUri"));
+builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
 
 // Add services to the container.
 builder.Services.AddHostedService<EmailWorker>();

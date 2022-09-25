@@ -8,6 +8,6 @@ namespace AuthFuncsWorkerService.Interface
 {
     public interface INotificationService
     {
-        Task SendNotificationAsync(string recipient, string message);
+        Task SendNotificationAsync(string recipient, EmailWorkerActionName action);
     }
 }

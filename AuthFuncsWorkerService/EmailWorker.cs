@@ -1,4 +1,5 @@
-﻿using AuthFuncsWorkerService.Interface;
+﻿using AuthFuncsCore.Config;
+using AuthFuncsWorkerService.Interface;
 using Azure.Messaging.ServiceBus;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -6,23 +7,25 @@ using System.Reflection;
 
 namespace AuthFuncsWorkerService
 {
+    public enum EmailWorkerActionName
+    {
+        PasswordReset,
+    }
+
     public class EmailWorker : BackgroundService, INotificationService, IDisposable
     {
-        static string connectionString;
-        static string queueName = "authfuncsemailqueue";
-
         static ServiceBusClient client;
         static ServiceBusSender sender;
 
         public ILogger<EmailWorker> Logger { get; }
 
-        public EmailWorker(ILogger<EmailWorker> logger)
+        public EmailWorker(ILogger<EmailWorker> logger, BusServiceConfig busServiceConfig)
         {
             Logger = logger; 
             
             var clientOptions = new ServiceBusClientOptions() { TransportType = ServiceBusTransportType.AmqpWebSockets };
-            client = new ServiceBusClient(connectionString, clientOptions);
-            sender = client.CreateSender(queueName);
+            client = new ServiceBusClient(busServiceConfig.ConnectionString, clientOptions);
+            sender = client.CreateSender(busServiceConfig.EmailQueueName);
         }
 
         protected override async Task<Task> ExecuteAsync(CancellationToken stoppingToken)
@@ -37,7 +40,7 @@ namespace AuthFuncsWorkerService
             return Task.CompletedTask;
         }
 
-        public async Task SendNotificationAsync(string recipient, string message)
+        public async Task SendNotificationAsync(string recipient, EmailWorkerActionName action)
         {
             using ServiceBusMessageBatch messageBatch = await sender.CreateMessageBatchAsync();
 
@@ -62,6 +65,8 @@ namespace AuthFuncsWorkerService
             sender.DisposeAsync();
             client.DisposeAsync();
             Console.WriteLine("Disposed EmailWorker");
+
+            base.Dispose();
         }
     }
 }

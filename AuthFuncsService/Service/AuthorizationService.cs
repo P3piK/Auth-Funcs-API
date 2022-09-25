@@ -4,6 +4,7 @@ using AuthFuncsRepository.Entity;
 using AuthFuncsService.Dto.Authorization;
 using AuthFuncsService.Exception;
 using AuthFuncsService.Interface;
+using AuthFuncsWorkerService;
 using AuthFuncsWorkerService.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -83,14 +84,13 @@ namespace AuthFuncsService.Service
             };
         }
 
-        public void ForgotPassword(string login)
+        public void ResetPassword(string login)
         {
-            NotificationService.SendNotificationAsync(login, "Hello world");
 
             var user = Context.Users.FirstOrDefault(u => u.Login == login);
             if (user != null)
             {
-                // notificationService.NotifyForgotPassword();
+                NotificationService.SendNotificationAsync(login, EmailWorkerActionName.PasswordReset);
             }
         }
 
