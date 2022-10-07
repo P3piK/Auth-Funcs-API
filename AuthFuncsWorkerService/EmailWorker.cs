@@ -1,9 +1,12 @@
 ﻿using AuthFuncsCore.Config;
+using AuthFuncsWorkerService.Dto;
 using AuthFuncsWorkerService.Interface;
 using Azure.Messaging.ServiceBus;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace AuthFuncsWorkerService
 {
@@ -43,15 +46,23 @@ namespace AuthFuncsWorkerService
         public async Task SendNotificationAsync(string recipient, EmailWorkerActionName action)
         {
             using ServiceBusMessageBatch messageBatch = await sender.CreateMessageBatchAsync();
+            var body = JsonSerializer.Serialize(
+                new NotificationDto() 
+                { 
+                    Recipient = recipient, 
+                    Action = action.ToString() 
+                });
+            
+            if (!messageBatch.TryAddMessage(new ServiceBusMessage(body)))
+            {
+                throw new Exception($"Failed to add message to Bus for {recipient}");
+            }
 
             try
             {
-                if (!messageBatch.TryAddMessage(new ServiceBusMessage($"Hello {recipient}")))
-                {
-                    throw new Exception($"Failed to add message to Bus for {recipient}");
-                }    
-
-                Console.WriteLine($"Notification sent successfully to {recipient}!");
+                await sender.SendMessagesAsync(messageBatch);
+                Console.WriteLine($"Added message to queue successfully!");
+                Logger.LogInformation($"Added message to queue: {body}");
             }
             catch (Exception e)
             {
