@@ -20,13 +20,12 @@ namespace AuthFuncsAPI.Extensions
         public static void RegisterConfiguration(this IServiceCollection services, ConfigurationManager configuration)
         {
             var authenticationConfig = new AuthenticationConfig();
-            var busServiceConfig = new BusServiceConfig();
 
             configuration.GetSection("Authentication").Bind(authenticationConfig);
-            configuration.GetSection("BusService").Bind(busServiceConfig);
 
             services.AddSingleton(authenticationConfig);
-            services.AddSingleton(busServiceConfig);
+
+            services.AddSingleton<BusServiceConfig>();
         }
 
         public static void ConfigureJwtAuthentication(this IServiceCollection services, AuthenticationConfig authenticationConfig)

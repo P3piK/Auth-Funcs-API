@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,13 @@ namespace AuthFuncsCore.Config
 {
     public class BusServiceConfig
     {
-        public string ConnectionString { get; set; }
-        public string EmailQueueName { get; set; }
+        public BusServiceConfig(IConfiguration configuration)
+        {
+            ConnectionString = configuration["BusServiceConnectionString"];
+            EmailQueueName = configuration["BusServiceQueueName"];
+        }
+
+        public string ConnectionString { get; }
+        public string EmailQueueName { get; }
     }
 }

@@ -86,7 +86,6 @@ namespace AuthFuncsService.Service
 
         public void ResetPassword(string login)
         {
-
             var user = Context.Users.FirstOrDefault(u => u.Login == login);
             if (user != null)
             {
