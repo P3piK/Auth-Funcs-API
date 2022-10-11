@@ -59,6 +59,12 @@ namespace AuthFuncsService.Service
                 throw new BadRequestException(ExceptionMessageResource.InvalidUsernameOrPassword);
             }
 
+            if (user.Status != UserStatusEnum.Active)
+            {
+                throw new System.Exception($"Invalid user status: {user.Status.Name}");
+            }
+
+
             response.Token = WriteJwtToken(user);
 
             return response;
@@ -90,6 +96,9 @@ namespace AuthFuncsService.Service
             if (user != null)
             {
                 NotificationService.SendNotificationAsync(login, EmailWorkerActionName.PasswordReset);
+
+                user.Status = UserStatusEnum.PasswordReset;
+                user.Persist();
             }
         }
 
