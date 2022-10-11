@@ -4,6 +4,8 @@ using AuthFuncsRepository.Entity;
 using AuthFuncsService.Dto.Authorization;
 using AuthFuncsService.Exception;
 using AuthFuncsService.Interface;
+using AuthFuncsWorkerService;
+using AuthFuncsWorkerService.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -20,11 +22,15 @@ namespace AuthFuncsService.Service
     public class AuthorizationService : IAuthorizationService
     {
         #region Constructor
-        public AuthorizationService(AFContext context, IPasswordHasher<User> passwordHasher, AuthenticationConfig authenticationConfig)
+        public AuthorizationService(AFContext context, 
+            IPasswordHasher<User> passwordHasher, 
+            AuthenticationConfig authenticationConfig,
+            INotificationService notificationService)
         {
             Context = context;
             PasswordHasher = passwordHasher;
             AuthenticationConfig = authenticationConfig;
+            NotificationService = notificationService;
         }
         #endregion
 
@@ -32,6 +38,7 @@ namespace AuthFuncsService.Service
         public AFContext Context { get; }
         public IPasswordHasher<User> PasswordHasher { get; }
         public AuthenticationConfig AuthenticationConfig { get; }
+        public INotificationService NotificationService { get; }
         #endregion
 
         public LoginResponseDto Login(LoginRequestDto loginRequest)
@@ -51,6 +58,12 @@ namespace AuthFuncsService.Service
             {
                 throw new BadRequestException(ExceptionMessageResource.InvalidUsernameOrPassword);
             }
+
+            if (user.Status != UserStatusEnum.Active)
+            {
+                throw new System.Exception($"Invalid user status: {user.Status.Name}");
+            }
+
 
             response.Token = WriteJwtToken(user);
 
@@ -75,6 +88,18 @@ namespace AuthFuncsService.Service
                 Role = user.Role.Name,
                 Status = user.Status.Name,
             };
+        }
+
+        public void ResetPassword(string login)
+        {
+            var user = Context.Users.FirstOrDefault(u => u.Login == login);
+            if (user != null)
+            {
+                NotificationService.SendNotificationAsync(login, EmailWorkerActionName.PasswordReset);
+
+                user.Status = UserStatusEnum.PasswordReset;
+                user.Persist();
+            }
         }
 
         #region Private

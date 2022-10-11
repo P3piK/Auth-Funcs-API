@@ -11,6 +11,6 @@ namespace AuthFuncsService.Interface
     {
         RegisterResponseDto RegisterUser(RegisterRequestDto registerRequest);
         LoginResponseDto Login(LoginRequestDto loginRequest);
-
+        void ResetPassword(string login);
     }
 }

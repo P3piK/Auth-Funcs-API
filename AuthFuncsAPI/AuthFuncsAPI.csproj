@@ -4,6 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>efcec469-955b-41a6-a745-5f512038590a</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,8 +16,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.8" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.8">
+    <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.2.2" />
+    <PackageReference Include="Azure.Identity" Version="1.7.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.9" />
+    <PackageReference Include="Microsoft.Azure.ServiceBus" Version="5.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.9">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

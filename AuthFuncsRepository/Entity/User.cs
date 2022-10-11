@@ -38,7 +38,7 @@ namespace AuthFuncsRepository.Entity
         {
             SetupSystemFields();
 
-            context.Add(this);
+            context.Update(this);
             context.SaveChanges();
 
             return Id;

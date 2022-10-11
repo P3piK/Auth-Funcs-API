@@ -2,13 +2,19 @@ using AuthFuncsAPI.Extensions;
 using AuthFuncsAPI.Middleware;
 using AuthFuncsCore.Config;
 using AuthFuncsRepository;
+using AuthFuncsWorkerService;
 using FluentValidation.AspNetCore;
+using Microsoft.Azure.ServiceBus.Core;
 using NLog.Web;
+using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+var keyVaultEndpoint = new Uri("https://authfuncsvault.vault.azure.net/");
+builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
 
+// Add services to the container.
+builder.Services.AddHostedService<EmailWorker>();
 builder.Services.AddControllers();
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 
@@ -17,6 +23,8 @@ builder.Services.AddDbContext<AFContext>();
 // service extensions 
 builder.Services.RegisterConfiguration(builder.Configuration);
 builder.Services.RegisterServices();
+builder.Services.RegisterMiddleware();
+builder.Services.RegisterMiscs();
 
 builder.Services.ConfigureCors();
 var serviceProvider = builder.Services.BuildServiceProvider();

@@ -1,6 +1,7 @@
 ﻿using AuthFuncsRepository.Entity;
 using AuthFuncsRepository.Extension;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +12,12 @@ namespace AuthFuncsRepository
 {
     public class AFContext : DbContext
     {
-        private string connectionString =
-            "Server=(localdb)\\mssqllocaldb;Database=AuthFuncsDb;Trusted_Connection=True";
+        private readonly string connectionString;
+
+        public AFContext(IConfiguration configuration)
+        {
+            connectionString = configuration["DbConnectionString"];
+        }
 
         public DbSet<User> Users { get; set; }
         public DbSet<UserStatus> UserStatuses { get; set; }
