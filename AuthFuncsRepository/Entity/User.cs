@@ -17,7 +17,7 @@ namespace AuthFuncsRepository.Entity
         {
         }
 
-        public User(DbContext context)
+        public User(AFContext context)
         {
             this.context = context;
         }

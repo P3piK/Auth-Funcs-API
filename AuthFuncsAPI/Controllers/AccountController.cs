@@ -1,45 +1,59 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+﻿using AuthFuncsService.Dto.Account;
+using AuthFuncsService.Interface;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace AuthFuncsAPI.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+    [Route("api/[controller]")]
     public class AccountController : ControllerBase
     {
+        #region Properties
+
+        public IAccountService AccountService { get; }
+
+        #endregion
+
+        #region Constructor
+
+        public AccountController(IAccountService accountService)
+        {
+            AccountService = accountService;
+        }
+
+        #endregion
+
         // GET: api/<AccountController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<AccountDto> Get()
         {
-            Thread.Sleep(2000);
-
-            return new string[] { "value1", "value2" };
+            return AccountService.FindAll();
         }
 
         // GET api/<AccountController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        [Authorize()]
+        public AccountDto Get(int id)
         {
-            return "value";
-        }
-
-        // POST api/<AccountController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
+            return AccountService.FindById(id);
         }
 
         // PUT api/<AccountController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void Put(int id, [FromBody] AccountDto value)
         {
+            AccountService.Update(id, value);
         }
 
         // DELETE api/<AccountController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        [Authorize(Roles = "")]
+        public void Deactivate(int id)
         {
+            AccountService.Deactivate(id);
         }
     }
 }
