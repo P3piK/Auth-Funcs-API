@@ -20,6 +20,7 @@ namespace AuthFuncsAPI.Extensions
         public static void RegisterServices(this IServiceCollection services)
         {
             services.AddScoped<IAuthorizationService, AuthorizationService>();
+            services.AddScoped<IUserPrincipalService, UserPrincipalService>();
 
             services.AddSingleton<INotificationService, EmailWorker>();
         }
