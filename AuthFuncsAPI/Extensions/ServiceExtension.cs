@@ -21,6 +21,7 @@ namespace AuthFuncsAPI.Extensions
         {
             services.AddScoped<IAuthorizationService, AuthorizationService>();
             services.AddScoped<IUserPrincipalService, UserPrincipalService>();
+            services.AddScoped<IAccountService, AccountService>();
 
             services.AddSingleton<INotificationService, EmailWorker>();
         }

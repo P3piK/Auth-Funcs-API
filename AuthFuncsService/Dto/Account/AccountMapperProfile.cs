@@ -12,7 +12,9 @@ namespace AuthFuncsService.Dto.Account
     {
         public AccountMapperProfile()
         {
-            CreateMap<User, AccountDto>();
+            CreateMap<User, AccountDto>()
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.Name))
+                .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.Name));
         }
     }
 }

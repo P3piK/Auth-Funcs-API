@@ -4,7 +4,6 @@ using AuthFuncsCore.Config;
 using AuthFuncsRepository;
 using AuthFuncsWorkerService;
 using FluentValidation.AspNetCore;
-using Microsoft.Azure.ServiceBus.Core;
 using NLog.Web;
 using Azure.Identity;
 
@@ -17,7 +16,7 @@ builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredent
 builder.Services.AddHostedService<EmailWorker>();
 builder.Services.AddControllers();
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.ConfigureAutoMapper();
 
 builder.Services.AddDbContext<AFContext>();
 
@@ -51,6 +50,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseCors("CorsPolicy");
 
 app.MapControllers();
 

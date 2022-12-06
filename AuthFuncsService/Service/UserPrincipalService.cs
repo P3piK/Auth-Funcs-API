@@ -20,6 +20,17 @@ namespace AuthFuncsService.Service
 
         public ClaimsPrincipal? User => httpContextAccessor.HttpContext?.User;
 
-        public int? GetUserId => Int32.Parse(User.FindFirstValue(nameof(ClaimTypes.NameIdentifier)));
+        public int? GetUserId
+        {
+            get
+            {
+                var claim = User.FindFirstValue(nameof(ClaimTypes.NameIdentifier));
+                if (!String.IsNullOrEmpty(claim))
+                {
+                    return Int32.Parse(claim);
+                }
+                return null;
+            }
+        }
     }
 }

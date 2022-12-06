@@ -15,7 +15,8 @@ namespace AuthFuncsService.Dto.Authorization
             RuleFor(x => x.Login)
                 .NotEmpty()
                 .MinimumLength(3)
-                .MaximumLength(25);
+                .MaximumLength(95)
+                .EmailAddress();
 
             RuleFor(x => x.Password)
                 .NotEmpty()

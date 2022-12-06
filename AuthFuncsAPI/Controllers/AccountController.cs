@@ -7,7 +7,7 @@ using System.Security.Claims;
 namespace AuthFuncsAPI.Controllers
 {
     [ApiController]
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     public class AccountController : ControllerBase
     {
@@ -35,7 +35,6 @@ namespace AuthFuncsAPI.Controllers
 
         // GET api/<AccountController>/5
         [HttpGet("{id}")]
-        [Authorize()]
         public AccountDto Get(int id)
         {
             return AccountService.FindById(id);

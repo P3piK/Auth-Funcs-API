@@ -16,6 +16,7 @@ namespace AuthFuncsAPI.Middleware
         {
             try
             {
+                Logger.LogInformation($"[{context.Request.Method}] {context.Request.Path} {context.Connection.RemoteIpAddress}");
                 await next.Invoke(context);
             }
             catch (BadRequestException e)

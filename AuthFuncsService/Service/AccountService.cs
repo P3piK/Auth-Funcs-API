@@ -40,7 +40,9 @@ namespace AuthFuncsService.Service
 
         public IEnumerable<AccountDto> FindAll()
         {
-            return Context.Users.Select(u => Mapper.Map<AccountDto>(u));
+            return Context.Users
+                .Select(u => Mapper.Map<AccountDto>(u))
+                .ToList();
         }
 
         public AccountDto FindById(int id)

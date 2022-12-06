@@ -1,4 +1,5 @@
 ﻿using AuthFuncsCore.Config;
+using AuthFuncsService.Dto.Account;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -46,6 +47,14 @@ namespace AuthFuncsAPI.Extensions
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationConfig.JwtKey)),
                 };
             });
+        }
+
+        public static void ConfigureAutoMapper(this IServiceCollection services)
+        {
+            services.AddAutoMapper(cfg =>
+             {
+                 cfg.AddProfile<AccountMapperProfile>();
+             });
         }
     }
 }
