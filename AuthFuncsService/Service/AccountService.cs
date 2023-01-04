@@ -64,7 +64,9 @@ namespace AuthFuncsService.Service
             
             if (user != null)
             {
-                //
+                user.Login = account.Login;
+                user.Status = Enum.Parse<UserStatusEnum>(account.Status);
+                user.Role = Enum.Parse<UserRoleEnum>(account.Role);
 
                 user.ModifierId = UserPrincipalService.GetUserId;
                 user.Persist();

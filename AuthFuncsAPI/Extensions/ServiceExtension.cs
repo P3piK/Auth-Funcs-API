@@ -1,6 +1,7 @@
 ﻿using AuthFuncsAPI.Middleware;
 using AuthFuncsCore.Config;
 using AuthFuncsRepository.Entity;
+using AuthFuncsService.Dto.Account;
 using AuthFuncsService.Dto.Authorization;
 using AuthFuncsService.Interface;
 using AuthFuncsService.Service;
@@ -36,6 +37,7 @@ namespace AuthFuncsAPI.Extensions
         {
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddScoped<IValidator<RegisterRequestDto>, RegisterRequestDtoValidator>();
+            services.AddScoped<IValidator<AccountDto>, AccountDtoValidator>();
             services.AddTransient<Stopwatch>();
         }
     }
